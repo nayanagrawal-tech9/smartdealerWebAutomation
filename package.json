@@ -1,0 +1,23 @@
+{
+  "name": "smartdealerwebautomation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "regression": "npx playwright test --grep @web  --config playwright.config.ts --project=chrome --reporter=line,allure-playwright",
+    "smoke": "npx playwright test tests/EmployeeTest.spec.ts --project=Chrome"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.53.2",
+    "@types/node": "^24.0.12",
+    "allure-playwright": "^3.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^11.3.0"
+  }
+}
