@@ -9,7 +9,12 @@ const config = {
     timeout : 50000
   },
   
-  reporter: 'html',
+  reporter: [
+    ['list'],
+    ['junit', { outputFile: 'results/test-results.xml' }]
+    ['html']
+  ],
+  //reporter: 'html',
   projects : [
     {
       name : 'Safari',
