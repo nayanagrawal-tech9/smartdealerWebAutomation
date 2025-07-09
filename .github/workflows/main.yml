@@ -34,3 +34,10 @@ jobs:
         with:
           name: failure-screenshots
           path: screenshots/
+
+      - name: 📤 Upload Mochawesome HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report
+          path: mochawesome-report/
