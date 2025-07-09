@@ -65,3 +65,16 @@ jobs:
             else
               echo "❌ No JUnit test-results.xml found." >> $GITHUB_STEP_SUMMARY
             fi
+
+      - name: 📤 Upload JUnit XML report
+          uses: actions/upload-artifact@v4
+        with:
+          name: junit-test-report
+          path: results/test-results.xml
+
+      - name: Upload Allure Report
+        if: always()
+          uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
