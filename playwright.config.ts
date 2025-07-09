@@ -1,9 +1,13 @@
-const { devices } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
+import fs from 'fs';
 
-const config = {
+
+fs.mkdirSync('results', { recursive: true });
+
+export default defineConfig({
   testDir: './tests',
   retries: 0, //Number of retries for failed test cases
-  Worker: 1, //Running parallel execution
+  workers: 1, //Running parallel execution
   timeout: 40 * 1000,
   expect: {
     timeout: 50000
@@ -25,8 +29,8 @@ const config = {
         screenshot: 'on',
         trace: 'on',
         viewport: null,
-        ignoreHttpsErrors: true,
-        Permissions: ['geolocation'],
+        ignoreHTTPSErrors: true,
+        permissions: ['geolocation'],
         video: 'retain-on-failure'
         //viewport : {width:123, height:123},
         //...devices['iPhone 11']
@@ -41,13 +45,13 @@ const config = {
         screenshot: 'on',
         trace: 'on',
         viewport: null,
-        ignoreHttpsErrors: true,
-        Permissions: ['geolocation'],
+        ignoreHTTPSErrors: true,
+        permissions: ['geolocation'],
         video: 'retain-on-failure'
       }
     }
 
 
   ],
-};
-module.exports = config
+});
+//module.exports = config
