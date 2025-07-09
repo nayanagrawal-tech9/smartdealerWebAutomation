@@ -35,9 +35,8 @@ jobs:
           name: failure-screenshots
           path: screenshots/
 
-      - name: 📤 Upload Mochawesome HTML report
-        if: always()
+      - name: 📤 Upload Allure results
         uses: actions/upload-artifact@v4
         with:
-          name: mochawesome-report
-          path: mochawesome-report/
+          name: allure-results
+          path: allure-results/

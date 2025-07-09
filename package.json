@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "regression": "npx playwright test --grep @web  --config playwright.config.ts --project=chrome --reporter=line,allure-playwright",
-    "smoke": "npx playwright test tests/EmployeeTest.spec.ts --project=Chrome"
+    "smoke": "npx playwright test --project=Chrome --reporter=line,allure-playwright" 
   },
   "keywords": [],
   "author": "",
