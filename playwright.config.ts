@@ -12,7 +12,7 @@ const config = {
   reporter: [
     ['list'],
     ['junit', { outputFile: 'results/test-results.xml' }]
-    ['html']
+    ['allure-playwright']    
   ],
   //reporter: 'html',
   projects : [
