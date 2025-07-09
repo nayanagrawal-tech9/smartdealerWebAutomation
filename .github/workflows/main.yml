@@ -26,7 +26,14 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: 🧪 Run Mocha tests
-        run: npm run smoke
+        run: npm run smartdealer
+
+      - name: Upload Allure Report
+        if: always()
+          uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
 
       - name: 📤 Upload screenshots on failure (optional)
         if: failure()
@@ -34,12 +41,6 @@ jobs:
         with:
           name: failure-screenshots
           path: test-results/
-
-      - name: 📤 Upload Allure results
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results
-          path: allure-results/
 
       - name: 🔧 Install xmllint
         run: sudo apt-get install -y libxml2-utils
@@ -72,9 +73,4 @@ jobs:
           name: junit-test-report
           path: results/test-results.xml
 
-      - name: Upload Allure Report
-        if: always()
-          uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: allure-report
+      
