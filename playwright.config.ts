@@ -8,7 +8,7 @@ export default defineConfig({
   testDir: './tests',
   retries: 0, //Number of retries for failed test cases
   workers: 1, //Running parallel execution
-  timeout: 40 * 1000,
+  timeout: 50 * 1000,
   expect: {
     timeout: 50000
   },

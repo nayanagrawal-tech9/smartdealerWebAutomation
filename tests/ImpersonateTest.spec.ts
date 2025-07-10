@@ -1,7 +1,6 @@
 import { test } from '@playwright/test';
 import { customTest } from '../Utils/test-base.ts';
 import { POManager } from '../PageObjects/POManager.ts';
-import {Page} from '@playwright/test';
 
 const dataSet = JSON.parse(JSON.stringify(require('../Utils/PlaceholderTestData.json')));
 
@@ -15,9 +14,16 @@ const dataSet = JSON.parse(JSON.stringify(require('../Utils/PlaceholderTestData.
     await loginPage.validLogin(testDataForStoreSelection.userName, testDataForStoreSelection.password);
 
     await loginPage.verifyLoginSuccess();
+
+    const impersonate = poManager.getImpersonatePage();
+    await impersonate.clickImparsonateUser();
+    await impersonate.verifyImpersonatePopup();
+    await impersonate.enterEmailAndClickImpersonate();
+
+    await impersonate.verifyUserIsImpersonated();
+    await impersonate.cancelImpersonation();
+
     await loginPage.logout();
 
 
-})
-//}
-;
+});
