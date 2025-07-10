@@ -5,7 +5,7 @@
   "scripts": {
     "regression": "npx playwright test --grep @web  --config playwright.config.ts --project=chrome --reporter=line,allure-playwright",
     "smoke": "npx playwright test --project=Chrome --reporter=line,allure-playwright",
-    "smartdealer": "npx playwright test --project=Chrome --reporter=junit | tee results/test-results.xml"
+    "testt": "npx playwright test tests/EmployeeTest.spec.ts --project=Chrome --reporter=line,allure-playwright"
   },
   "keywords": [],
   "author": "",
@@ -13,12 +13,14 @@
   "description": "",
   "devDependencies": {
     "@playwright/test": "^1.53.2",
+    "@types/axios": "^0.9.36",
     "@types/node": "^24.0.12",
     "allure-playwright": "^3.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@cucumber/cucumber": "^11.3.0"
+    "@cucumber/cucumber": "^11.3.0",
+    "axios": "^1.10.0"
   }
 }

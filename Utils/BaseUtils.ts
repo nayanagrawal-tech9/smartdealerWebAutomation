@@ -1,4 +1,9 @@
-import { Locator } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
+import { TIMEOUT } from "dns";
+
+export const wait = (ms: number): Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
 
 export function generateAutomationEmail(): string {
   const now = new Date();
@@ -15,43 +20,38 @@ export function generateAutomationEmail(): string {
   return `AutomationUser${timestamp}@yopmail.com`;
 }
 
-export async function selectStoresForEmployees(checkboxAccess: Locator, dropdownRole: Locator, selectValueFromDropdown: Locator) {
+export async function retryClickUntilTargetVisible(
+  page: Page,
+  clickLocator: Locator,
+  targetLocator: Locator,
+  options: {
+    retries?: number;
+    delayMs?: number;
+    timeoutMs?: number;
+  } = {}
+) {
+  const { retries = 5, delayMs = 1000, timeoutMs = 10000 } = options;
 
-  // Get count of all checkboxes like storeRoles[0].hasAccess, storeRoles[1].hasAccess, etc.
-  const count = await checkboxAccess.count();
-  console.log(`Found ${count} checkboxes.`);
+  for (let i = 0; i < retries; i++) {
+    try {
+      console.log(`🔁 Attempt ${i + 1}: clicking the button...`);
+      await clickLocator.click({ timeout: 3000 });
 
-  // Loop and check each one
-  for (let i = 0; i < count; i++) {
-    const checkboxCount = checkboxAccess.nth(i);
-    const isChecked = await checkboxCount.isChecked();
+      // Try waiting for the target element to appear
+      await expect(targetLocator).toBeVisible({ timeout: timeoutMs });
+      console.log(`✅ Target appeared after click`);
+      return; // Success!
+    } catch (err: any) {
+      console.warn(`⚠️ Attempt ${i + 1} failed: ${err.message}`);
+      if (i === retries - 1) {
+        throw new Error(`❌ Failed to click and wait for target after ${retries} retries.`);
+      }
 
-    if (!isChecked) {
-      await checkboxCount.check(); // ✅ checks the checkbox if not already
+      await page.waitForTimeout(delayMs);
     }
-
-    console.log(`Checkbox at index ${i} is now selected.`);
   }
-
-  const selectDropdownCount = await dropdownRole.count();
-  const valueCount = await selectValueFromDropdown.count();
-  console.log(`Found ${selectDropdownCount} checkboxes.`);
-  for (let i = 1; i < count; i++) {
-    await dropdownRole.nth(i + 1).click();
-    for(let j=0; j < valueCount; j++){
-      await selectValueFromDropdown.nth(j).click();
-    //const isChecked = await checkboxCount.click();
-    }
-   
-
-    
-
-    //await dropdownRole.nth(i + 1).click();;
-    //const isSelected = await selectdropdownValue.click();
-
-  }
-
 }
+
 
 
 export async function retry<T>(

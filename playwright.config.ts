@@ -15,8 +15,8 @@ export default defineConfig({
 
   reporter: [
     ['list'],
-    ['junit', { outputFile: 'results/test-results.xml' }]
-    //['allure-playwright']
+    ['json', { outputFile: 'results/report.json' }],
+    ['allure-playwright']
   ],
   //reporter: 'html',
   projects: [
@@ -41,7 +41,7 @@ export default defineConfig({
       use: {
 
         browserName: 'chromium',
-        headless: true,
+        headless: false,
         screenshot: 'on',
         trace: 'on',
         viewport: null,

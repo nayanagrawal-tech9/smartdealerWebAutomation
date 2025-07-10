@@ -67,6 +67,4 @@ export const customTest = baseTest.extend<{
       
         }
     }
-
-    
 )

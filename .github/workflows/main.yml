@@ -42,35 +42,8 @@ jobs:
           name: failure-screenshots
           path: test-results/
 
-      - name: 🔧 Install xmllint
-        run: sudo apt-get install -y libxml2-utils
-
-      - name: 🔧 Install XML tools
-        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
-
-      - name: 📊 Generate Test Summary (XML)
+      - name: 📊 Generate Test Summary (from JSON)
         if: always()
-        run: |
-            echo "### 🧪 Playwright Test Summary" >> $GITHUB_STEP_SUMMARY
-
-            if [ -f results/test-results.xml ]; then
-              TOTAL=$(xmllint --xpath 'count(//testcase)' results/test-results.xml)
-              FAILED=$(xmllint --xpath 'count(//testcase[failure])' results/test-results.xml)
-              SKIPPED=$(xmllint --xpath 'count(//testcase[skipped])' results/test-results.xml)
-              PASSED=$((TOTAL - FAILED - SKIPPED))
-
-              echo "**Total Tests:** $TOTAL" >> $GITHUB_STEP_SUMMARY
-              echo "**✅ Passed:** $PASSED" >> $GITHUB_STEP_SUMMARY
-              echo "**❌ Failed:** $FAILED" >> $GITHUB_STEP_SUMMARY
-              echo "**⚠️ Skipped:** $SKIPPED" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "❌ No JUnit test-results.xml found." >> $GITHUB_STEP_SUMMARY
-            fi
-
-      - name: 📤 Upload JUnit XML report
-          uses: actions/upload-artifact@v4
-        with:
-          name: junit-test-report
-          path: results/test-results.xml
+        run: node Utils/generate-summary.js
 
       
