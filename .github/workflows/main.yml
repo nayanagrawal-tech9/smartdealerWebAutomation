@@ -27,6 +27,8 @@ name: Playwright Tests
     27
     28        - name: 🧪 Run Playwright tests
     29          run: npm run testt
+                env:
+                    CI: true
     30
     31        - name: 📑 Generate Allure report
     32          if: always()
