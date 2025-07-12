@@ -23,7 +23,7 @@ const dataSet = JSON.parse(JSON.stringify(require('../Utils/PlaceholderTestData.
     await settingStoreScheduling.getNumberOFworkingdaysData();
     await settingStoreScheduling.getNumberOfDaysWorkedInaWeek();
     
-
+    //Logout from application
     await loginPage.logout();
 
 
