@@ -8,7 +8,7 @@ if (!fs.existsSync(reportPath)) {
 
 const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
 
-// Define types for specs and tests
+// Types
 interface TestResult {
   status: string;
 }
@@ -19,29 +19,40 @@ interface Test {
 
 interface Spec {
   tests: Test[];
+  status?: string;
 }
 
 interface Suite {
   specs: Spec[];
 }
 
-const total = (report.suites as Suite[]).reduce((sum: number, suite: Suite) => sum + suite.specs.length, 0);
+let total = 0;
+let failed = 0;
+let skipped = 0;
 
-const failed = (report.suites as Suite[])
-  .flatMap((suite: Suite) => suite.specs)
-  .filter((spec: Spec) =>
-    spec.tests.some((test: Test) =>
-      test.results.some((r: TestResult) => r.status === 'failed')
-    )
-  ).length;
+(report.suites as Suite[]).forEach((suite) => {
+  suite.specs.forEach((spec) => {
+    total++;
 
-const skipped = (report.suites as Suite[])
-  .flatMap((suite: Suite) => suite.specs)
-  .filter((spec: Spec) =>
-    spec.tests.every((test: Test) =>
-      test.results.every((r: TestResult) => r.status === 'skipped')
-    )
-  ).length;
+    const allTests = spec.tests || [];
+
+    if (allTests.length === 0 && spec.status) {
+      // fallback for crashed/untracked tests
+      if (spec.status === 'failed') failed++;
+      else if (spec.status === 'skipped') skipped++;
+    } else {
+      const hasFailure = allTests.some(test =>
+        test.results.some(result => result.status === 'failed')
+      );
+      const allSkipped = allTests.every(test =>
+        test.results.every(result => result.status === 'skipped')
+      );
+
+      if (hasFailure) failed++;
+      else if (allSkipped) skipped++;
+    }
+  });
+});
 
 const passed = total - failed - skipped;
 
