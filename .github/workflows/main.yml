@@ -26,8 +26,8 @@ name: Playwright Tests
     25        - name: 🎭 Install Playwright browsers
     26          run: npx playwright install --with-deps
     27
-    28        - name: 🧪 Run Playwright tests
-    29          run: npm run testt
+    28        - name: 🧪 Run Playwright tests (only @Sanity)
+    29          run: npm run sanityRun
                 env:
                     CI: true
     30

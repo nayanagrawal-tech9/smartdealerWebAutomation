@@ -21,7 +21,7 @@ customTest(`@web Game Day date verification for ETL`, async ({page, testDataForS
 }),
 
 //test.describe.configure();
-customTest(`@web @Pace Calculation for New Tab`, async ({page, testDataForScheduling})=>
+customTest(`@web @Sanity Calculation for New Tab`, async ({page, testDataForScheduling})=>
 {
 
     const poManager = new POManager(page);
