@@ -52,6 +52,59 @@ export async function retryClickUntilTargetVisible(
   }
 }
 
+export async function calculatePaceForMTDColumn(
+  page: Page,
+  workedUntilYesterday: number,
+  totalWorkingDays: number
+): Promise<void> {
+  if (workedUntilYesterday === 0 || totalWorkingDays === 0) {
+    console.warn(`⚠️ Cannot calculate pace. Invalid input.`);
+    return;
+  }
+
+  const mtdButtons = page.locator(`xpath=//div[@col-id='mtd'][@role='gridcell']/button`);
+  const mtdCount = await mtdButtons.count();
+  console.log(`🔍 Found ${mtdCount} MTD buttons.`);
+
+  const expectedPaceList: number[] = [];
+
+  // Step 1: Calculate expected pace for each MTD amount
+  for (let i = 0; i < mtdCount; i++) {
+    const text = (await mtdButtons.nth(i).textContent())?.trim() ?? '0';
+    const clean = text.replace(/[₹,]/g, '');
+    const mtdAmount = parseFloat(clean);
+
+    if (isNaN(mtdAmount)) {
+      console.warn(`❌ Invalid MTD amount at index ${i}: "${text}"`);
+      expectedPaceList.push(0);
+      continue;
+    }
+
+    const pace = (mtdAmount / workedUntilYesterday) * totalWorkingDays;
+    expectedPaceList.push(pace);
+
+    console.log(`📈 Row ${i + 1}: MTD = ₹${Math.round(mtdAmount).toLocaleString()} → Expected Pace = ₹${Math.round(pace).toLocaleString()}`);
+  }
+
+  // Step 2: Extract and validate UI pace values
+  const paceCells = page.locator(`xpath=//div[@col-id='pace'][@role='gridcell' and not(descendant::span) and normalize-space() != '0']`);
+  const uiPaceCount = await paceCells.count();
+
+  expect(uiPaceCount).toBe(expectedPaceList.length);
+
+  for (let i = 0; i < uiPaceCount; i++) {
+    const uiText = (await paceCells.nth(i).textContent())?.trim() ?? '0';
+    const uiValue = parseFloat(uiText.replace(/[₹,]/g, ''));
+
+    const expected = expectedPaceList[i];
+
+    console.log(`🟦 Row ${i + 1}: UI Pace = ₹${Math.round(uiValue).toLocaleString()} | Expected = ₹${Math.round(expected).toLocaleString()}`);
+    expect(Math.round(uiValue)).toBeCloseTo(Math.round(expected), 0);
+  }
+}
+
+
+
 
 
 export async function retry<T>(

@@ -11,6 +11,7 @@ export class LoginPage{
     verifyLoginSuccessText: Locator;
     selectUserDropdown: Locator;
     signoutButton: Locator;
+    verifyLogoutSuccess: Locator;
 
 
     constructor(page: Page)
@@ -21,7 +22,8 @@ export class LoginPage{
         this.password = page.locator('input[name="password"]');
         this.verifyLoginSuccessText = page.locator('h1.text-4xl.mt-2.mb-2.text-center');
         this.selectUserDropdown = page.locator('.flex.gap-3');
-        this.signoutButton = page.locator('div:nth-child(5)');
+        this.signoutButton = page.locator("//div[normalize-space()='Sign out']");
+        this.verifyLogoutSuccess = page.locator("h1[class='text-2xl mb-[28px]']");
         
     }
 
@@ -44,6 +46,7 @@ export class LoginPage{
      async logout(){
         await this.selectUserDropdown.click();
         await this.signoutButton.click();
+        await this.verifyLogoutSuccess.textContent();
         
      }
 

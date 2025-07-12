@@ -5,7 +5,7 @@
   "scripts": {
     "regression": "npx playwright test --grep @web  --config playwright.config.ts --project=chrome --reporter=line,allure-playwright",
     "smoke": "npx playwright test --project=Chrome --reporter=line,allure-playwright",
-    "testt": "npx playwright test tests/ImpersonateTest.spec.ts --project=Chrome --reporter=line,allure-playwright"
+    "testt": "npx playwright test --grep @Pace tests/GameDayTest.spec.ts --project=Chrome --reporter=line,allure-playwright"
   },
   "keywords": [],
   "author": "",

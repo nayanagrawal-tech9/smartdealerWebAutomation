@@ -1,7 +1,7 @@
 
 import { test, expect, Locator } from '@playwright/test';
 import { Page } from '@playwright/test';
-import { generateAutomationEmail, retry, selectStoresForEmployees } from '../Utils/BaseUtils'
+import { generateAutomationEmail, retry } from '../Utils/BaseUtils'
 
 export class Impersonate {
 
@@ -12,6 +12,8 @@ export class Impersonate {
     enterImpersonationUser: Locator;
     selectFromSuggestion: Locator;
     clickOnImpersonateButton: Locator;
+    verifyimpersonateSuccess: Locator;
+    clickCrossInImpersonatedScreen: Locator;
 
 
     constructor(page: Page) {
@@ -24,6 +26,10 @@ export class Impersonate {
         this.enterImpersonationUser = page.locator("input[placeholder='Enter the email of the user to impersonate']");
         this.selectFromSuggestion = page.locator("div[id='radix-:r19:'] li:nth-child(1)");
         this.clickOnImpersonateButton = page.locator("//button[normalize-space()='Impersonate']")
+        this.verifyimpersonateSuccess = page.locator(".text-sm.text-gray-700");
+        this.clickCrossInImpersonatedScreen = page.locator("//button[contains(@class, 'text-gray-400') and contains(@class, 'p-2')]");
+
+
 
     }
 
@@ -37,9 +43,18 @@ export class Impersonate {
      }
 
      async enterEmailAndClickImpersonate(){
-        await this.enterImpersonationUser.fill("");
-        await this.selectFromSuggestion.click();
+        await this.enterImpersonationUser.fill("nayan.admin.123@yopmail.com");
+        //await this.selectFromSuggestion.click();
         await this.clickOnImpersonateButton.click();
+     }
+
+     async verifyUserIsImpersonated(){
+      const actualText = await this.verifyimpersonateSuccess.textContent();
+      expect(actualText).toContain("You're currently impersonating");
+     }
+
+     async cancelImpersonation(){
+      await this.clickCrossInImpersonatedScreen.click();
      }
 
 
