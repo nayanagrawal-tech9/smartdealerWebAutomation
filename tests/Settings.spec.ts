@@ -11,6 +11,8 @@ const dataSet = JSON.parse(JSON.stringify(require('../Utils/PlaceholderTestData.
 
     const poManager = new POManager(page);
     const loginPage = poManager.getLoginPage();
+
+    //Login to the application
     await loginPage.goTo(testDataForStoreSelection.url);
     await loginPage.validLogin(testDataForStoreSelection.userName, testDataForStoreSelection.password);
     await loginPage.verifyLoginSuccess();
@@ -27,6 +29,4 @@ const dataSet = JSON.parse(JSON.stringify(require('../Utils/PlaceholderTestData.
     await loginPage.logout();
 
 
-})
-//}
-;
+});
