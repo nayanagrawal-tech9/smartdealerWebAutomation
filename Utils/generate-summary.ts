@@ -8,13 +8,41 @@ if (!fs.existsSync(reportPath)) {
 
 const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
 
-const total = report.suites.reduce((sum: any, suite: { specs: string | any[]; }) => sum + suite.specs.length, 0);
-const failed = report.suites
-  .flatMap(suite => suite.specs)
-  .filter(spec => spec.tests.some((test: { results: any[]; }) => test.results.some(r => r.status === 'failed'))).length;
-const skipped = report.suites
-  .flatMap(suite => suite.specs)
-  .filter(spec => spec.tests.every((test: { results: any[]; }) => test.results.every(r => r.status === 'skipped'))).length;
+// Define types for specs and tests
+interface TestResult {
+  status: string;
+}
+
+interface Test {
+  results: TestResult[];
+}
+
+interface Spec {
+  tests: Test[];
+}
+
+interface Suite {
+  specs: Spec[];
+}
+
+const total = (report.suites as Suite[]).reduce((sum: number, suite: Suite) => sum + suite.specs.length, 0);
+
+const failed = (report.suites as Suite[])
+  .flatMap((suite: Suite) => suite.specs)
+  .filter((spec: Spec) =>
+    spec.tests.some((test: Test) =>
+      test.results.some((r: TestResult) => r.status === 'failed')
+    )
+  ).length;
+
+const skipped = (report.suites as Suite[])
+  .flatMap((suite: Suite) => suite.specs)
+  .filter((spec: Spec) =>
+    spec.tests.every((test: Test) =>
+      test.results.every((r: TestResult) => r.status === 'skipped')
+    )
+  ).length;
+
 const passed = total - failed - skipped;
 
 const summary = `
