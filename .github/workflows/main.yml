@@ -5,6 +5,7 @@ name: Playwright Tests
      5      branches: [ main ]
      6    pull_request:
      7      branches: [ main ]
+            types: [opened, synchronize]
      8
      9  jobs:
     10    test:
