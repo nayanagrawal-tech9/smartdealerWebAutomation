@@ -1,49 +1,51 @@
-name: Playwright Mocha Tests
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: ⬇️ Checkout repository
-        uses: actions/checkout@v3
-
-      - name: 🟦 Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: 📦 Install dependencies
-        run: npm ci
-
-      - name: 🎭 Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      - name: 🧪 Run Mocha tests
-        run: npm run smartdealer
-
-      - name: Upload Allure Report
-        if: always()
-          uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: allure-report
-
-      - name: 📤 Upload screenshots on failure (optional)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: failure-screenshots
-          path: test-results/
-
-      - name: 📊 Generate Test Summary (from JSON)
-        if: always()
-        run: node Utils/generate-summary.js
-
-      
+name: Playwright Tests
+     2
+     3  on:
+     4    push:
+     5      branches: [ main ]
+     6    pull_request:
+     7      branches: [ main ]
+     8
+     9  jobs:
+    10    test:
+    11      runs-on: ubuntu-latest
+    12
+    13      steps:
+    14        - name: ⬇️ Checkout repository
+    15          uses: actions/checkout@v3
+    16
+    17        - name: 🟦 Setup Node.js
+    18          uses: actions/setup-node@v3
+    19          with:
+    20            node-version: '18'
+    21
+    22        - name: 📦 Install dependencies
+    23          run: npm ci
+    24
+    25        - name: 🎭 Install Playwright browsers
+    26          run: npx playwright install --with-deps
+    27
+    28        - name: 🧪 Run Playwright tests
+    29          run: npm run regression
+    30
+    31        - name: 📑 Generate Allure report
+    32          if: always()
+    33          run: npx allure generate allure-results --clean -o allure-report
+    34
+    35        - name: Upload Allure Report
+    36          if: always()
+    37          uses: actions/upload-artifact@v4
+    38          with:
+    39            name: allure-report
+    40            path: allure-report
+    41
+    42        - name: 📤 Upload screenshots on failure (optional)
+    43          if: failure()
+    44          uses: actions/upload-artifact@v4
+    45          with:
+    46            name: failure-screenshots
+    47            path: test-results/
+    48
+    49        - name: 📊 Generate Test Summary (from JSON)
+    50          if: always()
+    51          run: npx ts-node Utils/generate-summary.ts
