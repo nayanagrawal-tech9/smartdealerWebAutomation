@@ -31,12 +31,5 @@ customTest(`@web Create Employee`, async ({ page, testDataForStoreSelection }) =
     await loginPage.logout();
 
     await employeePage.fetchActivationLinkFromYopmail("automationuser20250710_144930@yopmail.com");
-
-
     //await page.pause();
-
-
-
-}
-
-)
+});

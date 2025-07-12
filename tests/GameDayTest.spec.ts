@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
-import { customTest } from '../Utils/test-base.js';
-import { POManager } from '../PageObjects/POManager.js';
-import { GameDayTotalStorePage } from '../PageObjects/GameDayTotalStorePage.js';
+import { customTest } from '../Utils/test-base.ts';
+import { POManager } from '../PageObjects/POManager.ts';
+import { GameDayTotalStorePage } from '../PageObjects/GameDayTotalStorePage.ts';
 
 
 //test.describe.configure({mode : 'serial'});
