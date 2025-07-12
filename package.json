@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "regression": "npx playwright test --grep @web  --config playwright.config.ts --project=chrome --reporter=line,allure-playwright",
-    "smoke": "npx playwright test --project=Chrome --reporter=line,allure-playwright",
-    "sanityRun": "npx playwright test --grep @Sanity tests/GameDayTest.spec.ts --project=Chrome --reporter=line,allure-playwright"
+    "regression": "npx playwright test --grep @web  --config playwright.config.ts --project=chrome --reporter=line,,json=results/report.json,allure-playwright",
+    "smoke": "npx playwright test --project=Chrome --reporter=line,json=results/report.json,allure-playwright",
+    "sanityRun": "npx playwright test --grep @Sanity tests/GameDayTest.spec.ts --project=Chrome --reporter=line,json=results/report.json,allure-playwright"
   },
   "keywords": [],
   "author": "",
